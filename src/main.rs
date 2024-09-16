@@ -39,7 +39,7 @@ fn main() {
     let mut window = initialize_window();
 
     let path = format!("roms/{}", config.rom_path);
-    let program = fs::read(&path).unwrap_or_else(|e| {
+    let program = fs::read(&path).unwrap_or_else(|_e| {
         println!("Error: file not found at {path}");
         process::exit(1);
     });
@@ -48,10 +48,8 @@ fn main() {
 
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
     let sink = Sink::try_new(&stream_handle).unwrap();
-    let sin = SineWave::new(440.0).take_duration(time::Duration::from_secs_f32(0.25));
 
     let mut display_timer = time::SystemTime::now();
-    let mut cycle_timer = time::SystemTime::now();
     while window.is_open() && !window.is_key_down(Key::Escape) {
         // Get keyboard input and send to chip8
         for i in 0..INPUT_MAP.len() {

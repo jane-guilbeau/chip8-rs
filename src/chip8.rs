@@ -104,8 +104,6 @@ impl Chip8 {
         let b2 = self.memory[(self.pc+1) as usize] as u16;
         let instruction = (b1 << 8) + b2;
 
-        //println!("{:#b} + {:#b} = {:#b}", b1, b2, instruction);
-
         self.pc += 2;
 
         instruction
@@ -123,8 +121,6 @@ impl Chip8 {
 
         // Last three half-bytes of instruction
         let n2n3n4 = (instruction &0xfff) as u16;
-
-        //println!("{:x}, {:x}, {:x}, {:x}", n1, n2, n3, n4);
         
         // Match instruction to opcode
         match n1 {
@@ -328,14 +324,10 @@ impl Chip8 {
                     0x33 => {
                         let num = self.registers[n2 as usize];
 
-                        //println!("{}", num);
-
                         let index = self.index_register as usize;
                         self.memory[index] = (num / 100) % 10;
                         self.memory[index + 1] = (num / 10) % 10;
                         self.memory[index + 2] = num % 10;
-
-                        //println!("{} {} {}", self.memory[index], self.memory[index+1], self.memory[index+2]);
                     },
                     // FX55: Store registers in memory
                     0x55 => {
@@ -393,7 +385,7 @@ impl Chip8 {
     }
 
     // Debug methods
-    pub fn print_memory(&self) {
+    pub fn _print_memory(&self) {
         for (i, val) in self.memory.iter().enumerate() {
             if i % 10 == 0 { println!(); }
             print!("{:3x}: {:<2x}, ", i, val);
