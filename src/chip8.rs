@@ -87,12 +87,13 @@ impl Chip8 {
         self.sound_timer
     }
 
-    fn get_pixel(&self, x: usize, y: usize) -> bool {
-        self.display[y][x]
+    fn get_pixel(&self, x: usize, y: usize) -> Option<bool> {
+        if x < DISPLAY_WIDTH && y < DISPLAY_HEIGHT { Some(self.display[y][x]) }
+        else { None }
     }
 
     fn set_pixel(&mut self, x: usize, y: usize, value: bool) {
-        self.display[y][x] = value;
+        if x < DISPLAY_WIDTH && y < DISPLAY_HEIGHT { self.display[y][x] = value; }
     }
 
     pub fn set_key(&mut self, key: usize, value: bool) {
@@ -373,10 +374,11 @@ impl Chip8 {
 
                 if sprite_value {
                     // Flip corresponding bit on screen
-                    let screen_value = self.get_pixel((x+j) as usize, (y+i) as usize);
-                    self.set_pixel((x+j) as usize, (y+i) as usize, !screen_value);
+                    if let Some(screen_value) = self.get_pixel((x+j) as usize, (y+i) as usize) {
+                        self.set_pixel((x+j) as usize, (y+i) as usize, !screen_value);
 
-                    if screen_value { self.registers[15] = 1; }
+                        if screen_value { self.registers[15] = 1; }
+                    }
                 }
             }
 

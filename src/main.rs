@@ -73,7 +73,7 @@ fn main() {
                 .unwrap();
 
             // Play audio
-            if sink.len() <= 1 { sink.append( SineWave::new(440.0).take_duration(time::Duration::from_secs_f32(0.25)) ) };
+            if sink.len() <= 1 { sink.append( SineWave::new(440.0).take_duration(time::Duration::from_secs_f32(0.25)).amplify(0.2) ) };
             if chip8.get_sound_timer() > 0 { sink.play(); }
             else { sink.pause(); }
 
